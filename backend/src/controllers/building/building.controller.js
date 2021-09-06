@@ -10,9 +10,27 @@
  */
 
 const httpError = require('http-errors');
+const Model = require('../../models/building.model');
+const service = require('./building.service');
+
+exports.updateBuilding = (req, res, next) => {
+  const { buildingId, className } = req.body;
+  if (!buildingId || !className) {
+      return next(new createError.BadRequest('No buildingId or className!'));
+  }
+
+  return service.update(buildingId, className)
+      .then( updatedBuilding => {
+          res.status(201);
+          res.json(updatedBuilding);
+      })
+      .catch( err => next( new createError.BadRequest(err.message)) );
+}
 
 
-exports.updateBuilding = (req, res, next) => {}
-
-
-exports.getAllBuildingWithClassrooms = () => {};
+exports.getAllBuildingWithClassrooms = (req, res, next) => {
+  return service.getAll()
+    .then(list => {
+      res.json(list);
+    });
+};
