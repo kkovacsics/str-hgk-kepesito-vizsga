@@ -5,6 +5,9 @@ info:
   description: An API for the FullStack Developers Final Exam
 servers:
   - url: http://localhost:3000
+tags:
+  - name: "school"
+    description: "Access to Schools"
 paths:
   /student:
     get:
@@ -141,8 +144,180 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /school:
+    get:
+      tags:
+        - "school"
+      summary: Returns a list of schools
+      responses:
+        '200':
+          description: List of schools returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/School'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - "school"
+      summary: Creates a new school
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/school'
+      responses:
+        '201':
+          description: School has been created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/School'
+        '400':
+          description: Invalid request when the school data is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /school/{id}:
+    get:
+      tags:
+        - "school"
+      summary: Get a school
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns a school
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/School'
+        '404':
+          description: School based on id is doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - "school"
+      summary: Updates a school
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/School'
+      responses:
+        '200':
+          description: School has been updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/School'
+        '400':
+          description: Invalid request when the school data is invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - "school"
+      summary: Removes a school
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: School has been deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+        '404':
+          description: School based on id is doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    School:
+      type: object
+      required:
+        - name
+        - city
+        - street
+        - zipcode
+      properties:
+        name:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+        zipcode:
+          type: number
+        classrooms: 
+          type: array
+          items:
+            $ref: '#/components/schemas/Classroom'
+    Classroom:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
     Student:
       type: object
       required:
