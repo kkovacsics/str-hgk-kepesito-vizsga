@@ -16,7 +16,7 @@ const service = require('./building.service');
 exports.updateBuilding = (req, res, next) => {
   const { buildingId, className } = req.body;
   if (!buildingId || !className) {
-      return next(new createError.BadRequest('No buildingId or className!'));
+      return next(new httpError.BadRequest('No buildingId or className!'));
   }
 
   return service.update(buildingId, className)
@@ -24,7 +24,7 @@ exports.updateBuilding = (req, res, next) => {
           res.status(201);
           res.json(updatedBuilding);
       })
-      .catch( err => next( new createError.BadRequest(err.message)) );
+      .catch( err => next( new httpError.BadRequest(err.message)) );
 }
 
 

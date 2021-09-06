@@ -20,7 +20,9 @@ exports.update = (buildingId, className) => {
   //       })
   //   })
 
+  console.log(buildingId, className);
   const classroom = new Classroom({ name: className });
+  console.log(classroom);
   return classroom.save()
       .then( () => Building.findById(buildingId) )
       .then( building => {
